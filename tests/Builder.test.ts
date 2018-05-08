@@ -1,6 +1,4 @@
 import * as path from 'path'
-import * as React from 'react'
-import * as TestRenderer from 'react-test-renderer'
 
 import { Policy, Settings } from '@ckies/pages'
 
@@ -51,16 +49,6 @@ describe('Builder', () => {
       expect(builder.toHTML()).not.toContain('[[ toggle for="functional" ]]')
       expect(builder.toHTML()).not.toContain('[[ toggle for="performance" ]]')
       expect(builder.toHTML()).not.toContain('[[ toggle for="marketing" ]]')
-    })
-
-    it('can render a file into React Component', () => {
-      const node = TestRenderer.create(
-        builder.toComponent()
-      )
-
-      expect(
-        node.root.findByType('h1').children.toString()
-      ).toEqual('Cookie Settings')
     })
   })
 
@@ -139,16 +127,6 @@ describe('Builder', () => {
       expect(builder.toHTML()).not.toContain('[[ cookies type="functional" ]]')
       expect(builder.toHTML()).not.toContain('[[ cookies type="performance" ]]')
       expect(builder.toHTML()).not.toContain('[[ cookies type="marketing" ]]')
-    })
-
-    it('can render a file into React Component', () => {
-      const node = TestRenderer.create(
-        builder.toComponent()
-      )
-
-      expect(
-        node.root.findByType('h1').children.toString()
-      ).toEqual('Cookie Policy')
     })
   })
 })
