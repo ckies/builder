@@ -11,7 +11,7 @@ import { Cookie } from '../types'
 
 export interface Options {
   cookies?: Cookie[]
-  url?: {
+  links?: {
     policy?: string
     settings?: string
   }
@@ -37,9 +37,9 @@ export class Builder {
     ) : []
   }
 
-  private url() {
-    return this.options && this.options.url ? (
-      this.options.url
+  private links() {
+    return this.options && this.options.links ? (
+      this.options.links
     ) : {}
   }
 
@@ -51,7 +51,7 @@ export class Builder {
     ).use(
       CookieToggle
     ).use(
-      LinkRewriter, { url: this.url() }
+      LinkRewriter, { links: this.links() }
     ).use(
       parser
     ).processSync(

@@ -1,20 +1,20 @@
 import * as visit from 'unist-util-visit'
 
-export interface URLs {
+export interface Links {
   policy?: string
   settings?: string
 }
 
-const parser = (url: URLs) => (node: any, index: number, parent: any) => {
-  if (node.url === '#settings' && url.settings) {
-    node.url = url.settings
+const parser = (links: Links) => (node: any, index: number, parent: any) => {
+  if (node.url === '#settings' && links.settings) {
+    node.url = links.settings
   }
 
-  if (node.url === '#policy' && url.policy) {
-    node.url = url.policy
+  if (node.url === '#policy' && links.policy) {
+    node.url = links.policy
   }
 }
 
-export const LinkRewriter = (options: { url: URLs }) => (ast: any) => {
-  visit(ast, 'link', parser(options.url || []))
+export const LinkRewriter = (options: { links: Links }) => (ast: any) => {
+  visit(ast, 'link', parser(options.links || []))
 }

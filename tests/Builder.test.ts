@@ -51,7 +51,7 @@ describe('Builder', () => {
     })
 
     it('can render a file into HTML with custom links to policy', () => {
-      const tmp = new Builder(settings, { url: { policy: 'http://custom-link' }})
+      const tmp = new Builder(settings, { links: { policy: 'http://custom-link' }})
 
       expect(tmp.toHTML()).toContain('<a href="http://custom-link">Cookie Policy</a>')
     })
@@ -142,7 +142,7 @@ describe('Builder', () => {
     })
 
     it('can render a file into HTML with custom links to settings', () => {
-      const tmp = new Builder(policy, { url: { settings: 'http://custom-link' }})
+      const tmp = new Builder(policy, { links: { settings: 'http://custom-link' }})
       
       expect(tmp.toHTML()).toContain('<a href="http://custom-link">Cookie Settings</a>')
     })
