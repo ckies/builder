@@ -6,12 +6,21 @@ import * as stringify from 'remark-stringify'
 
 import { CookieTable } from '../blocks/CookieTable'
 import { CookieToggle } from '../blocks/CookieToggle'
+import { LinkRewriter } from '../blocks/LinkRewriter'
 import { Cookie } from '../types'
+
+export interface Options {
+  cookies?: Cookie[]
+  url?: {
+    policy?: string
+    settings?: string
+  }
+}
 
 export class Builder {
   constructor(
     public page: BasePage,
-    public cookies?: Cookie[]
+    public options?: Options
   ) { }
 
   public toMarkdown(): string {
@@ -22,13 +31,27 @@ export class Builder {
     return this.parseWith(html).toString()
   }
 
+  private cookies() {
+    return this.options && this.options.cookies ? (
+      this.options.cookies
+    ) : []
+  }
+
+  private url() {
+    return this.options && this.options.url ? (
+      this.options.url
+    ) : {}
+  }
+
   private parseWith(parser: any) {
     return remark().use(
       shortcodes
     ).use(
-      CookieTable, { cookies: this.cookies || [] }
+      CookieTable, { cookies: this.cookies() }
     ).use(
       CookieToggle
+    ).use(
+      LinkRewriter, { url: this.url() }
     ).use(
       parser
     ).processSync(

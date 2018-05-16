@@ -8,16 +8,15 @@ import { Cookie, CookieType } from '../src/types'
 describe('Builder', () => {
   describe('Settings', () => {
     let builder: Builder
+    const settings = new Settings('en')
 
     beforeEach(() => {
-      const settings = new Settings('en')
       builder = new Builder(settings)
     })
 
     it('can return the raw Markdown file with custom shortcodes', () => {
       expect(builder.page.data).toContain('# Cookie Settings')
 
-      expect(builder.page.data).toContain('[[ toggle for="necessary" ]]')
       expect(builder.page.data).toContain('[[ toggle for="functional" ]]')
       expect(builder.page.data).toContain('[[ toggle for="performance" ]]')
       expect(builder.page.data).toContain('[[ toggle for="marketing" ]]')
@@ -26,12 +25,10 @@ describe('Builder', () => {
     it('can render a file into Markdown with checkbox for cookie toggle', () => {
       expect(builder.toMarkdown()).toContain('# Cookie Settings')
 
-      expect(builder.toMarkdown()).toContain('<input type="checkbox" name="ckies_toggle_necessary" data-cookie-type="necessary" />')
       expect(builder.toMarkdown()).toContain('<input type="checkbox" name="ckies_toggle_functional" data-cookie-type="functional" />')
       expect(builder.toMarkdown()).toContain('<input type="checkbox" name="ckies_toggle_performance" data-cookie-type="performance" />')
       expect(builder.toMarkdown()).toContain('<input type="checkbox" name="ckies_toggle_marketing" data-cookie-type="marketing" />')
 
-      expect(builder.toMarkdown()).not.toContain('[[ toggle for="necessary" ]]')
       expect(builder.toMarkdown()).not.toContain('[[ toggle for="functional" ]]')
       expect(builder.toMarkdown()).not.toContain('[[ toggle for="performance" ]]')
       expect(builder.toMarkdown()).not.toContain('[[ toggle for="marketing" ]]')
@@ -40,20 +37,30 @@ describe('Builder', () => {
     it('can render a file into HTML with checkbox for cookie toggle', () => {
       expect(builder.toHTML()).toContain('<h1>Cookie Settings</h1>')
 
-      expect(builder.toHTML()).toContain('<input type="checkbox" name="ckies_toggle_necessary" data-cookie-type="necessary" />')
       expect(builder.toHTML()).toContain('<input type="checkbox" name="ckies_toggle_functional" data-cookie-type="functional" />')
       expect(builder.toHTML()).toContain('<input type="checkbox" name="ckies_toggle_performance" data-cookie-type="performance" />')
       expect(builder.toHTML()).toContain('<input type="checkbox" name="ckies_toggle_marketing" data-cookie-type="marketing" />')
 
-      expect(builder.toHTML()).not.toContain('[[ toggle for="necessary" ]]')
       expect(builder.toHTML()).not.toContain('[[ toggle for="functional" ]]')
       expect(builder.toHTML()).not.toContain('[[ toggle for="performance" ]]')
       expect(builder.toHTML()).not.toContain('[[ toggle for="marketing" ]]')
+    })
+
+    it('can render a file into HTML with default links to policy', () => {
+      expect(builder.toHTML()).toContain('<a href="#policy">Cookie Policy</a>')
+    })
+
+    it('can render a file into HTML with custom links to policy', () => {
+      const tmp = new Builder(settings, { url: { policy: 'http://custom-link' }})
+
+      expect(tmp.toHTML()).toContain('<a href="http://custom-link">Cookie Policy</a>')
     })
   })
 
   describe('Policy', () => {
     let builder: Builder
+    const policy = new Policy('en')
+
     const cookies = [
       {
         name: "example_cookie_necessary",
@@ -88,8 +95,7 @@ describe('Builder', () => {
     ]
 
     beforeEach(() => {
-      const policy = new Policy('en')
-      builder = new Builder(policy, cookies)
+      builder = new Builder(policy, { cookies })
     })
 
     it('can return the raw Markdown file with custom shortcodes', () => {
@@ -118,6 +124,8 @@ describe('Builder', () => {
     it('can render a file into HTML with table of cookies', () => {
       expect(builder.toHTML()).toContain('<h1>Cookie Policy</h1>')
 
+      expect(builder.toHTML()).toContain('<table>')
+
       expect(builder.toHTML()).toContain('<td>info for performance cookie 1st')
       expect(builder.toHTML()).toContain('<td>info for performance cookie 2nd')
       expect(builder.toHTML()).toContain('<td>info for functional cookie')
@@ -127,6 +135,16 @@ describe('Builder', () => {
       expect(builder.toHTML()).not.toContain('[[ cookies type="functional" ]]')
       expect(builder.toHTML()).not.toContain('[[ cookies type="performance" ]]')
       expect(builder.toHTML()).not.toContain('[[ cookies type="marketing" ]]')
+    })
+
+    it('can render a file into HTML with default links to settings', () => {
+      expect(builder.toHTML()).toContain('<a href="#settings">Cookie Settings</a>')
+    })
+
+    it('can render a file into HTML with custom links to settings', () => {
+      const tmp = new Builder(policy, { url: { settings: 'http://custom-link' }})
+      
+      expect(tmp.toHTML()).toContain('<a href="http://custom-link">Cookie Settings</a>')
     })
   })
 })

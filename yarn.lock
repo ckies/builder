@@ -16,9 +16,9 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@ckies/pages@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@ckies/pages/-/pages-0.0.6.tgz#555f4ea1dc71551fce4f20d33348bd3b59a1ade6"
+"@ckies/pages@0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@ckies/pages/-/pages-0.0.9.tgz#8bda3a72e2828603a98bd30a5f61d09b72621295"
 
 "@types/jest@^22.2.3":
   version "22.2.3"
